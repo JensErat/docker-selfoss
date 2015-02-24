@@ -27,6 +27,18 @@ Usually, the configuration file would be stored in `/var/www/html/config.ini`, a
 
 Per default, selfoss relies on SQLite, which should be fully sufficient for a single-user application like selfoss. If you prefer a "real" database management application, the image might be missing PHP modules (patches to the Dockerfile are welcome).
 
+### Update Cronjob
+
+Add a cronjob somewhere to fetch updates feeds on a regular base. Following line would update the feeds all 15 minutes:
+
+    */15 * * * * curl -s http://example.org/update >/dev/null
+
+If you set up a password-protected login, you will be required to allow anonymous updates, adding
+
+    allow_public_update_access=1
+
+to your `config.ini`.
+
 ### Nginx Proxy
 
 In case you want to proxy selfoss with Nginx, this is a proposal for the `server { }` directive:
@@ -36,11 +48,13 @@ In case you want to proxy selfoss with Nginx, this is a proposal for the `server
     }
 
     location /update {
+        proxy_set_header Host $http_host;
         proxy_read_timeout 300;
         proxy_pass http://selfoss:80;
     }
 
     location / {
+        proxy_set_header Host $http_host;
         proxy_pass http://selfoss:80;
     }
 
