@@ -13,7 +13,7 @@ RUN a2enmod headers rewrite && \
 
 ADD https://github.com/SSilence/selfoss/releases/download/2.12/selfoss-2.12.zip /tmp/
 RUN unzip /tmp/selfoss-*.zip -d /var/www/html && \
-    rm /tmp/selfoss-*.zip /var/www/html/index.html && \
+    rm /tmp/selfoss-*.zip && \
     ln -s /var/www/html/data/config.ini /var/www/html && \
     chown -R www-data:www-data /var/www/html
 
